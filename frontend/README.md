@@ -16,6 +16,8 @@ npm run dev
 yarn dev
 ```
 
+( App should be running at http://localhost:3000 )
+
 Building for Production:
 ```bash
 npm run build
