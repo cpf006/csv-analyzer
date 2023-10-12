@@ -10,7 +10,7 @@ export default function Page() {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h4" gutterBottom style={{ color: '#ffffff' }}>
+      <Typography variant="h3" mt={2} style={{ color: '#ffffff' }}>
         CSV Analytics App
       </Typography>
       <UploadComponent setData={setData} />

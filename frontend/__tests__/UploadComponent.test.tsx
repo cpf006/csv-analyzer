@@ -1,8 +1,9 @@
-import { render } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import UploadComponent from '../src/components/UploadComponent';
 
-test('renders upload button', () => {
-  const { getByText } = render(<UploadComponent />);
-  const uploadButton = getByText(/Upload CSV/i);
-  expect(uploadButton).toBeInTheDocument();
+describe('UploadComponent', () => {
+  it('renders the drag-and-drop area', () => {
+    render(<UploadComponent setData={jest.fn()} />);
+    expect(screen.getByText(/Drag & drop a CSV file here, or click to select one/i)).toBeInTheDocument;
+  });
 });
