@@ -12,7 +12,7 @@ async def process_csv(file: UploadFile):
                 "average": round(float(df[column].mean()), 2),
                 "min": int(df[column].min()),
                 "max": int(df[column].max()),
-                "std_dev": float(df[column].std())
+                "std_dev": round(float(df[column].std()), 2)
             }
         else:
             value_counts = df[column].value_counts().to_dict()
