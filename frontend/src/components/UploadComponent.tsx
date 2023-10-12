@@ -1,14 +1,22 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button, Paper } from '@mui/material';
 import axios from 'axios';
+import { useDropzone } from 'react-dropzone';
 
 function UploadComponent({ setData }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length === 0) return;
+    setSelectedFile(acceptedFiles[0]);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "text/csv": [".csv"] },
+    multiple: false
+  });
 
   const handleUpload = async () => {
     if (!selectedFile) return;
@@ -30,13 +38,19 @@ function UploadComponent({ setData }) {
       setData(response.data.data);
     } catch (error) {
       console.error("Error uploading CSV:", error);
-      // Here you can also set some state to show an error message to the user
+      setError("Error uploading CSV. Please try again.");
     }
   };
 
   return (
     <Paper elevation={3} className="paper">
-      <input type="file" accept=".csv" onChange={handleFileChange} />
+      <div {...getRootProps()} className="dropzone">
+        <input {...getInputProps()}/>
+        <p>Drag & drop a CSV file here, or click to select one</p>
+        {selectedFile &&
+          <p>Selected File: {selectedFile.name}</p>
+        }
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <Button variant="contained" onClick={handleUpload} className="upload-btn">
         Calculate
