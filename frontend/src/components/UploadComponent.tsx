@@ -4,6 +4,7 @@ import axios from 'axios';
 
 function UploadComponent({ setData }) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedFile(event.target.files[0]);
@@ -11,6 +12,11 @@ function UploadComponent({ setData }) {
 
   const handleUpload = async () => {
     if (!selectedFile) return;
+
+    if (selectedFile.type !== "text/csv") {
+      setError("Please upload a valid CSV file.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append('file', selectedFile);
@@ -29,10 +35,11 @@ function UploadComponent({ setData }) {
   };
 
   return (
-    <Paper elevation={3}>
+    <Paper elevation={3} className="paper">
       <input type="file" accept=".csv" onChange={handleFileChange} />
-      <Button variant="contained" onClick={handleUpload}>
-        Upload
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <Button variant="contained" onClick={handleUpload} className="upload-btn">
+        Calculate
       </Button>
     </Paper>
   );
