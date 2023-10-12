@@ -13,11 +13,8 @@ RUN npm install
 # Copy the rest of the content
 COPY ./frontend /app/
 
-# Build the React app
-RUN npm run build
-
-# Expose port 3000
+# Expose port 3000 to be accessible outside the container
 EXPOSE 3000
 
-# Start the app
-CMD ["npm", "start"]
+# Run the application in development mode
+CMD ["npm", "run", "dev"]

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
-export default function DisplayComponent({ data }) {
-  function snakeToRegularCase(str) {
-    return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+export default function DisplayComponent({ data }: any) {
+  function snakeToRegularCase(str: string) {
+    return str.split('_').map((word: any) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
 
-  function DisplayValue({ value }) {
+  function DisplayValue({ value }: any) {
     if (typeof value === 'object') {
       return (
         <ul>
@@ -34,12 +34,12 @@ export default function DisplayComponent({ data }) {
           <TableRow key={column}>
             <TableCell>{column}</TableCell>
             <TableCell>
-              {Object.entries(stats).map(([key, value]) => (
-                <div key={key}>
-                  {snakeToRegularCase(key)}: <DisplayValue value={value} />
-                </div>
-              ))}
-            </TableCell>
+            {Object.entries(stats as Record<string, any>).map(([key, value]) => (
+              <div key={key}>
+                {snakeToRegularCase(key)}: <DisplayValue value={value} />
+              </div>
+            ))}
+          </TableCell>
           </TableRow>
         ))}
       </TableBody>

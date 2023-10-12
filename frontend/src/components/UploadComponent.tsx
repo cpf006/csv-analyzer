@@ -3,23 +3,28 @@ import { Button, Paper } from '@mui/material';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 
-function UploadComponent({ setData }) {
+function UploadComponent({ setData }: any) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState(null);
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
+    setError(null);
     if (acceptedFiles.length === 0) return;
     setSelectedFile(acceptedFiles[0]);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: { "text/csv": [".csv"] },
     multiple: false
   });
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
+    setError(null);
+    if (!selectedFile) {
+      setError("Please select a CSV file before calculating.");
+      return;
+    }
 
     if (selectedFile.type !== "text/csv") {
       setError("Please upload a valid CSV file.");
