@@ -4,7 +4,7 @@ Offers a seamless solution for users to gain insights from their CSV data. With 
 
 ## Build and run with docker-compose:
 Docker Compose Installation
-For detailed instructions on installing Docker Compose, please refer to the official Docker documentation[official Docker documentation](https://docs.docker.com/compose/install/).
+For detailed instructions on installing Docker Compose, please refer to the official Docker documentation [official Docker documentation](https://docs.docker.com/compose/install/).
 
 ```bash
 docker-compose build

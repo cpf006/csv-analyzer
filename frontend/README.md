@@ -8,7 +8,7 @@ npm install
 npm run dev
 ```
 
-( App should be running at http://localhost:3000 )
+App should be running at http://localhost:3000
 
 ## Run tests:
 ```bash
