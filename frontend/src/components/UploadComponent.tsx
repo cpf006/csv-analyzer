@@ -2,13 +2,19 @@ import React, { useState, useCallback } from 'react';
 import { Button, Paper } from '@mui/material';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
+import { ResponseData } from '../types';
 
-function UploadComponent({ setData }: any) {
+type UploadComponentProps = {
+  setData: React.Dispatch<React.SetStateAction<ResponseData | null>>;
+};
+
+function UploadComponent({ setData }: UploadComponentProps) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState(null);
 
-  const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
+  const onDrop = useCallback(<T extends File>(acceptedFiles: File[]) => {
     setError(null);
+
     if (acceptedFiles.length === 0) return;
     setSelectedFile(acceptedFiles[0]);
   }, []);
@@ -21,12 +27,8 @@ function UploadComponent({ setData }: any) {
 
   const handleUpload = async () => {
     setError(null);
-    if (!selectedFile) {
-      setError("Please select a CSV file before calculating.");
-      return;
-    }
 
-    if (selectedFile.type !== "text/csv") {
+    if (selectedFile && selectedFile.type !== "text/csv") {
       setError("Please upload a valid CSV file.");
       return;
     }

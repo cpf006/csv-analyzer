@@ -1,12 +1,21 @@
 import React from 'react';
+import { ResponseData } from '../types';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
-export default function DisplayComponent({ data }: any) {
-  function snakeToRegularCase(str: string) {
-    return str.split('_').map((word: any) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+type DisplayComponentProps = {
+  data: ResponseData;
+};
+
+type DisplayValueProps = {
+  value: string | number | Record<string, number | string>;
+};
+
+export default function DisplayComponent({ data }: DisplayComponentProps) {
+  function snakeToRegularCase(str: string): string {
+    return str.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
 
-  function DisplayValue({ value }: any) {
+  function DisplayValue({ value }: DisplayValueProps) {
     if (typeof value === 'object') {
       return (
         <ul>
