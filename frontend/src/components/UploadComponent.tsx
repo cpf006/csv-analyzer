@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { Button, Paper } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { Button, Paper, Typography } from '@mui/material';
 import axios from 'axios';
-import { useDropzone } from 'react-dropzone';
 import { ResponseData } from '../types';
 
 type UploadComponentProps = {
@@ -9,26 +8,22 @@ type UploadComponentProps = {
 };
 
 function UploadComponent({ setData }: UploadComponentProps) {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [error, setError] = useState(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const onDrop = useCallback(<T extends File>(acceptedFiles: File[]) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
-
-    if (acceptedFiles.length === 0) return;
-    setSelectedFile(acceptedFiles[0]);
-  }, []);
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: { "text/csv": [".csv"] },
-    multiple: false
-  });
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setSelectedFile(files[0]);
+    }
+  };
 
   const handleUpload = async () => {
     setError(null);
 
-    if (selectedFile && selectedFile.type !== "text/csv") {
+    if (!selectedFile || selectedFile.type !== "text/csv") {
       setError("Please upload a valid CSV file.");
       return;
     }
@@ -50,16 +45,43 @@ function UploadComponent({ setData }: UploadComponentProps) {
   };
 
   return (
-    <Paper elevation={3} className="paper">
-      <div {...getRootProps()} className="dropzone">
-        <input {...getInputProps()}/>
-        <p>Drag & drop a CSV file here, or click to select one</p>
-        {selectedFile &&
-          <p>Selected File: {selectedFile.name}</p>
-        }
+    <Paper elevation={3} className="paper" style={{ padding: '20px' }}>
+      <div className="file-input">
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          data-testid="file-input"
+        />
+        <div
+          style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}
+        >
+          <Button
+            variant="contained"
+            style={{ backgroundColor: '#1a1a1a', color: 'white' }}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Choose CSV File
+          </Button>
+        </div>
+        <div
+          style={{ marginTop: '10px' }}
+        >
+          {selectedFile && 
+            <Typography 
+              variant="contained"
+              color="primary" 
+              
+            >
+                Selected File: {selectedFile.name}
+            </Typography>
+          }
+        </div>
       </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <Button variant="contained" onClick={handleUpload} className="upload-btn">
+      {error && <Typography variant="body2" color="error" style={{ marginTop: '10px' }}>{error}</Typography>}
+      <Button variant="contained" color="primary" onClick={handleUpload} className="upload-btn" style={{ marginTop: '20px' }}>
         Calculate
       </Button>
     </Paper>
